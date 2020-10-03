@@ -36,3 +36,7 @@ class Recipe(db.Model):
             'cook_time': self.cook_time,
             'directions': self.directions
         }
+        
+    @classmethod
+    def get_all_published(cls):
+        return cls.query.filter_by(is_publish=True).all()
