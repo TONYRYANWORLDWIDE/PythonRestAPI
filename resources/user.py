@@ -4,6 +4,9 @@ from http import HTTPStatus
 from utils import hash_password
 from models.user import User
 from flask_jwt_extended import jwt_optional, get_jwt_identity, jwt_required
+from Schemas import user
+user_schema = UserSchema()
+user_public_schema = UserSchema(exclude = ('email',))
 
 class MeResource(Resource):
     @jwt_required
@@ -40,6 +43,9 @@ class UserListResource(Resource):
 
     def post(self):
         json_data = request.get_json()
+        data, errors = user_schema.load(data = json_data)
+        if errors:
+            return {'message': 'Validation errors','errors': errors},HTTPStatus.BAD_REQUEST
         username = json_data.get('username')
         email = json_data.get('email')
         non_hash_password = json_data.get('password')
