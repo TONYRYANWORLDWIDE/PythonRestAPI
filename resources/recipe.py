@@ -12,7 +12,7 @@ class RecipeListResource(Resource):
         data = []
         for recipe in recipes:
             data.append(recipe.data())
-        return{'data':data}, HTTPStatus.OK
+        return{'data': data}, HTTPStatus.OK
 
     @jwt_required
     def post(self):
@@ -23,7 +23,7 @@ class RecipeListResource(Resource):
                         num_of_servings = json_data['num_of_servings'],
                         cook_time = json_data['cook_time'],
                         directions = json_data['directions'],
-                        user_id = current_user        )
+                        user_id = current_user)
         recipe.save()
         return recipe.data(), HTTPStatus.CREATED
 
@@ -36,7 +36,7 @@ class RecipeResource(Resource):
             return {'message': 'recipe not found'}, HTTPStatus.NOT_FOUND
         current_user = get_jwt_identity()
         if recipe.is_publish == False and recipe.user_id != current_user:
-            return {'message': 'Access is not allowed'}, HTTPStatus.OK, HTTPStatus.FORBIDDEN
+            return {'message': 'Access is not allowed'},  HTTPStatus.FORBIDDEN
         else:
             return recipe.data(), HTTPStatus.OK
     @jwt_required
@@ -56,7 +56,7 @@ class RecipeResource(Resource):
             recipe.directions = json_data['directions']
             recipe.save()
             return recipe.data(), HTTPStatus.OK
-            
+
     @jwt_required
     def delete(self, recipe_id):
         recipe = Recipe.get_by_id(recipe_id= recipe_id)
